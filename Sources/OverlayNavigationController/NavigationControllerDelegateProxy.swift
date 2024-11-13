@@ -78,7 +78,12 @@ open class NavigationControllerDelegateProxy: NSObject, UINavigationControllerDe
       return transition
     }
 
-    return nil
+    return OverlayNavigationControllerTransition().navigationController(
+      navigationController,
+      animationControllerFor: operation,
+      from: fromVC,
+      to: toVC
+    )
   }
 
 }

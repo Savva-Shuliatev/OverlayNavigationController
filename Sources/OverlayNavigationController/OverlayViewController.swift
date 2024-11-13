@@ -11,4 +11,6 @@ import UIKit
 @MainActor
 public protocol OverlayViewController: UIViewController {
   func customPoint(inside point: CGPoint, with event: UIEvent?) -> Bool
+  func hideContent(duration: TimeInterval)
+  func showContent(duration: TimeInterval)
 }
