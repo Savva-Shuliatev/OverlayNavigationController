@@ -54,7 +54,7 @@ public class OverlayNavigationControllerPushAnimation: NSObject, UIViewControlle
   }
 
   public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-    return 0.35
+    return (transitionContext?.isAnimated ?? false) ? 0.35 : 0
   }
 
   public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -115,10 +115,22 @@ public class OverlayNavigationControllerPushAnimation: NSObject, UIViewControlle
 
     fromOverlayViewController.hideContent(duration: duration)
 
-    toViewController.view.transform = CGAffineTransform(
-      translationX: containerView.frame.width,
-      y: 0
-    )
+    switch UIApplication.shared.userInterfaceLayoutDirection {
+    case .leftToRight:
+      toViewController.view.transform = CGAffineTransform(
+        translationX: containerView.frame.width,
+        y: 0
+      )
+
+    case .rightToLeft:
+      toViewController.view.transform = CGAffineTransform(
+        translationX: -containerView.frame.width,
+        y: 0
+      )
+
+    @unknown default:
+      break
+    }
 
     UIView.animate(withDuration: transitionDuration(using: transitionContext)) {
       toViewController.view.transform = .identity
@@ -138,7 +150,18 @@ public class OverlayNavigationControllerPushAnimation: NSObject, UIViewControlle
     containerView.insertSubview(toOverlayViewController.view, belowSubview: fromViewController.view)
 
     UIView.animate(withDuration: duration) {
-      fromViewController.view.transform = CGAffineTransform(translationX: -containerView.frame.width, y: 0)
+
+      switch UIApplication.shared.userInterfaceLayoutDirection {
+      case .leftToRight:
+        fromViewController.view.transform = CGAffineTransform(translationX: -containerView.frame.width, y: 0)
+
+      case .rightToLeft:
+        fromViewController.view.transform = CGAffineTransform(translationX: containerView.frame.width, y: 0)
+
+      @unknown default:
+        break
+      }
+
     } completion: { _ in
       fromViewController.view.transform = .identity
       transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
@@ -154,7 +177,7 @@ public class OverlayNavigationControllerPopAnimation: NSObject, UIViewController
   }
 
   public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-    return 0.35
+    return (transitionContext?.isAnimated ?? false) ? 0.35 : 0
   }
 
   public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -215,10 +238,22 @@ public class OverlayNavigationControllerPopAnimation: NSObject, UIViewController
 
     fromOverlayViewController.hideContent(duration: duration)
 
-    toViewController.view.transform = CGAffineTransform(
-      translationX: -containerView.frame.width,
-      y: 0
-    )
+    switch UIApplication.shared.userInterfaceLayoutDirection {
+    case .leftToRight:
+      toViewController.view.transform = CGAffineTransform(
+        translationX: -containerView.frame.width,
+        y: 0
+      )
+
+    case .rightToLeft:
+      toViewController.view.transform = CGAffineTransform(
+        translationX: containerView.frame.width,
+        y: 0
+      )
+
+    @unknown default:
+      break
+    }
 
     UIView.animate(withDuration: duration) {
       toViewController.view.transform = .identity
@@ -240,10 +275,25 @@ public class OverlayNavigationControllerPopAnimation: NSObject, UIViewController
     toOverlayViewController.showContent(duration: duration)
 
     UIView.animate(withDuration: duration) {
-      fromViewController.view.transform = CGAffineTransform(
-        translationX: containerView.frame.width,
-        y: 0
-      )
+
+      switch UIApplication.shared.userInterfaceLayoutDirection {
+
+      case .leftToRight:
+        fromViewController.view.transform = CGAffineTransform(
+          translationX: containerView.frame.width,
+          y: 0
+        )
+
+      case .rightToLeft:
+        fromViewController.view.transform = CGAffineTransform(
+          translationX: -containerView.frame.width,
+          y: 0
+        )
+
+      @unknown default:
+        break
+      }
+
     } completion: { _ in
       transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
     }
