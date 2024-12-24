@@ -22,4 +22,10 @@ open class OverlayNavigationController: UINavigationController {
     }
   }
 
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+    /// Just start `open override var delegate` get logic.
+    proxyDelegate.originalDelegate = delegate
+  }
+
 }
